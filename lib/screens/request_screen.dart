@@ -48,10 +48,13 @@ class _RequestScreenState extends State<RequestScreen> {
         'unit': data['unit'] ?? '',
       };
 
-      // Store under a new document in kitchen_requests with a 'pending' map containing '0': item
+      // Store under a new document in kitchen_requests using the same shape
+      // as KitchenRequestUploader: createdAt (serverTimestamp), status, pending list, sent list
       final payload = <String, dynamic>{
-        'createdAt': Timestamp.fromDate(now),
-        'pending': {'0': item},
+        'createdAt': FieldValue.serverTimestamp(),
+        'status': 'active',
+        'pending': [item],
+        'sent': [],
       };
 
       await FirebaseFirestore.instance.collection('kitchen_requests').add(payload);
